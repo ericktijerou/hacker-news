@@ -137,9 +137,6 @@ dependencies {
     implementation(okHttp)
     implementation(okHttpInterceptor)
 
-    //Glide
-    implementation(glide)
-
     //Room
     implementation(roomRuntime)
     kapt(roomCompiler)
@@ -164,8 +161,7 @@ dependencies {
     implementation(kotlinCoroutinesCore)
     implementation(kotlinSerializationRuntime)
 
-    // Leak Canary
-    debugImplementation(leakCanary)
+    implementation("com.ericktijerou.koleton:koleton:0.8.1")
 
     // Tests
     testImplementation(junit)
@@ -181,7 +177,4 @@ dependencies {
     androidTestImplementation(androidTestRunner)
     androidTestImplementation(androidTestExtJunit)
     androidTestImplementation(okhttpMockWebServer)
-
-    // Timber
-    implementation(timber)
 }

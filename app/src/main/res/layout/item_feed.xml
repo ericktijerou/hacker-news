@@ -3,20 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:targetApi="lollipop">
 
-    <data>
-
-        <import type="com.ericktijerou.hackernews.domain.entity.News" />
-
-        <import
-            alias="ExtensionFunctions"
-            type="com.ericktijerou.hackernews.presentation.ui.util.ExtensionsKt" />
-
-        <variable
-            name="news"
-            type="News" />
-    </data>
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clContainer"
         android:layout_width="match_parent"
@@ -34,13 +20,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="@{ExtensionFunctions.getRelativeTime(news.date)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAuthor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="@tools:sample/us_zipcodes" />
+            android:text="@tools:sample/us_zipcodes" />
 
         <TextView
             android:id="@+id/tvAuthor"
@@ -49,13 +34,12 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_marginTop="8dp"
-            android:text="@{news.author}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintBottom_toTopOf="@id/tvTime"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="@tools:sample/full_names" />
+            android:text="@tools:sample/full_names" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -65,10 +49,9 @@
             android:maxLines="2"
             app:layout_constraintVertical_chainStyle="packed"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text="@{ExtensionFunctions.toSpanned(news.title)}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tvAuthor"
-            tools:text="@tools:sample/lorem/random" />
+            android:text="@tools:sample/lorem/random" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="35dp"

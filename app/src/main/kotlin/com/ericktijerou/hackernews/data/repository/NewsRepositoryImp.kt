@@ -31,8 +31,8 @@ class NewsRepositoryImp(
         }
         return Listing(
             pagedList = livePagedList,
-            networkState = newsDataSourceFactory.liveData.switchMap {
-                it.state
+            loadingState = newsDataSourceFactory.liveData.switchMap {
+                it.loadingState
             },
             refresh = {
                 newsDataSourceFactory.liveData.value?.invalidate()

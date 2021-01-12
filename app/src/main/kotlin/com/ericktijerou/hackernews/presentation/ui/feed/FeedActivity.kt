@@ -2,13 +2,13 @@ package com.ericktijerou.hackernews.presentation.ui.feed
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ericktijerou.hackernews.R
+import com.ericktijerou.hackernews.core.LoadingState
 import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ActivityFeedBinding
@@ -16,7 +16,6 @@ import com.ericktijerou.hackernews.domain.entity.News
 import com.ericktijerou.hackernews.presentation.ui.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.util.observe
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class FeedActivity : BaseActivity<ActivityFeedBinding>() {
 
@@ -49,7 +48,6 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
 
     private fun observeError() {
         viewModel.error.observe(this) {
-            Timber.e(it)
             Toast.makeText(
                 this@FeedActivity,
                 R.string.load_news_error,
@@ -59,8 +57,12 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     }
 
     private fun observeLoading() {
-        viewModel.loading.observe(this) {
-            mViewBinding.indeterminateBar.visible(it)
+        viewModel.loadingState.observe(this) {
+            when (it) {
+                LoadingState.INITIAL_LOADED -> mViewBinding.indeterminateBar.gone()
+                LoadingState.INITIAL_LOADING -> mViewBinding.indeterminateBar.visible()
+                else -> feedAdapter.setState(it)
+            }
         }
     }
 
@@ -75,7 +77,6 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     }
 
     private fun goToStory(view: View, newsId: Long) {
-        Timber.d("newsId = $newsId")
     }
 
     companion object {

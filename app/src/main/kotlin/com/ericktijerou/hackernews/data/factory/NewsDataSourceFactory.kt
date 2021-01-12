@@ -28,7 +28,7 @@ class NewsDataSourceFactory (
     }
 
     companion object {
-        private const val PAGE_SIZE = 15
+        private const val PAGE_SIZE = 10
 
         fun pagedListConfig() = PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)

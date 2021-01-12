@@ -2,6 +2,7 @@ package com.ericktijerou.hackernews.data.repository
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import com.ericktijerou.hackernews.core.LoadingState
 import com.ericktijerou.hackernews.data.cache.NewsDataStore
 import com.ericktijerou.hackernews.data.entity.toDomain
 import com.ericktijerou.hackernews.data.network.NewsCloudStore
@@ -9,7 +10,6 @@ import com.ericktijerou.hackernews.domain.entity.News
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class NewsDataSource(
     private val cloudStore: NewsCloudStore,
@@ -17,7 +17,7 @@ class NewsDataSource(
     private val scope: CoroutineScope
 ) : PageKeyedDataSource<Int, News>() {
 
-    val state = MutableLiveData<Int>()
+    val loadingState = MutableLiveData<Int>()
 
     val initialLoad = MutableLiveData<Int>()
 
@@ -25,15 +25,19 @@ class NewsDataSource(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, News>
     ) {
+        loadingState.postValue(LoadingState.INITIAL_LOADING)
         fetchData(0, params.requestedLoadSize) {
             callback.onResult(it, null, 1)
+            loadingState.postValue(LoadingState.INITIAL_LOADED)
         }
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, News>) {
+        loadingState.postValue(LoadingState.LOADING)
         val page = params.key
         fetchData(page, params.requestedLoadSize) {
             callback.onResult(it, page + 1)
+            loadingState.postValue(LoadingState.LOADED)
         }
     }
 
@@ -56,6 +60,5 @@ class NewsDataSource(
     }
 
     private fun postError(message: String) {
-        Timber.e("An error happened: $message")
     }
 }
