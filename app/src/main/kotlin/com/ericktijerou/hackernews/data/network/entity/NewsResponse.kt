@@ -2,22 +2,20 @@ package com.ericktijerou.hackernews.data.network.entity
 
 import com.ericktijerou.hackernews.core.orZero
 import com.ericktijerou.hackernews.data.entity.NewsModel
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class NewsResponse(
-    @SerialName("created_at")
+    @SerializedName("created_at")
     val date: String? = null,
-    @SerialName("title")
+    @SerializedName("title")
     val title: String? = null,
-    @SerialName("story_title")
+    @SerializedName("story_title")
     val storyTitle: String? = null,
-    @SerialName("story_id")
+    @SerializedName("story_id")
     val storyId: Long? = null,
-    @SerialName("author")
+    @SerializedName("author")
     val author: String? = null,
-    @SerialName("comment_text")
+    @SerializedName("comment_text")
     val comment: String? = null
 )
 
