@@ -19,7 +19,7 @@ class NewsDataStore(
         return newsDao.getAll().map { it.toData() }
     }
 
-    suspend fun getNews(newsId: Long): NewsModel {
+    suspend fun getNewsById(newsId: Long): NewsModel {
         return newsDao.getNewsById(newsId).toData()
     }
 

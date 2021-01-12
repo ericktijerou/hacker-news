@@ -1,6 +1,7 @@
 package com.ericktijerou.hackernews.data.entity
 
 import com.ericktijerou.hackernews.data.cache.entity.NewsEntity
+import com.ericktijerou.hackernews.domain.entity.News
 
 data class NewsModel(
     val date: String,
@@ -12,6 +13,15 @@ data class NewsModel(
 )
 
 fun NewsModel.toLocal() = NewsEntity(
+    date = date,
+    title = title,
+    storyTitle = storyTitle,
+    storyId = storyId,
+    author = author,
+    comment = comment
+)
+
+fun NewsModel.toDomain() = News(
     date = date,
     title = title,
     storyTitle = storyTitle,
