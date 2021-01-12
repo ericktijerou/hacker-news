@@ -27,6 +27,7 @@ import Dependencies.okHttp
 import Dependencies.okHttpInterceptor
 import Dependencies.okhttpMockWebServer
 import Dependencies.okhttpTls
+import Dependencies.paging
 import Dependencies.retrofit
 import Dependencies.retrofitGsonConverter
 import Dependencies.retrofitKotlixConverter
@@ -122,6 +123,7 @@ dependencies {
     implementation(androidViewModel)
     implementation(androidTestEspressoCore)
     implementation(androidKtx)
+    implementation(paging)
 
     implementation(okHttp)
     implementation(okHttpInterceptor)

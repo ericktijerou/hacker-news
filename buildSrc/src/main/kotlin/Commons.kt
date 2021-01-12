@@ -62,7 +62,7 @@ object Dependencies {
     const val roomKtx = "androidx.room:room-ktx:${Versions.roomVersion}"
     const val glide = "com.github.bumptech.glide:glide:${Versions.glideVersion}"
     const val androidKtx = "androidx.core:core-ktx:${Versions.androidKtxVersion}"
-
+    const val paging = "androidx.paging:paging-runtime:${Versions.pagingVersion}"
 }
 
 object Versions {
@@ -92,4 +92,5 @@ object Versions {
     internal const val retrofitKotlinxVersion = "0.4.0"
     internal const val glideVersion = "4.5.0"
     internal const val androidKtxVersion = "0.1"
+    internal const val pagingVersion = "2.1.2"
 }
