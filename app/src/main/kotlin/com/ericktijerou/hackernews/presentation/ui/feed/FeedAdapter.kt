@@ -34,15 +34,14 @@ class FeedAdapter(
         val news = newsList[position]
         val binding = (holder as FeedViewHolder).binding
         binding.news = news
-        binding.cardview.setOnClickListener { onItemClick(it, news.storyId) }
+        binding.clContainer.setOnClickListener { onItemClick(it, news.storyId) }
     }
 
     override fun getItemCount() = newsList.size
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
-
-        (holder as FeedViewHolder).binding.cardview.setOnClickListener(null)
+        (holder as FeedViewHolder).binding.clContainer.setOnClickListener(null)
     }
 
 }

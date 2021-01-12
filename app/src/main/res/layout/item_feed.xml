@@ -7,70 +7,75 @@
 
         <import type="com.ericktijerou.hackernews.domain.entity.News" />
 
+        <import
+            alias="ExtensionFunctions"
+            type="com.ericktijerou.hackernews.presentation.ui.util.ExtensionsKt" />
+
         <variable
             name="news"
             type="News" />
     </data>
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardview"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_height="120dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/image_thumbnail"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@{ExtensionFunctions.getRelativeTime(news.date)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAuthor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="@tools:sample/us_zipcodes" />
+
+        <TextView
+            android:id="@+id/tvAuthor"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="8dp"
+            android:text="@{news.author}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintBottom_toTopOf="@id/tvTime"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="@tools:sample/full_names" />
 
-            <TextView
-                android:id="@+id/tvTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_margin"
-                android:layout_marginEnd="@dimen/text_margin"
-                android:layout_marginRight="@dimen/text_margin"
-                android:layout_marginBottom="@dimen/text_margin"
-                android:gravity="end"
-                android:maxLines="1"
-                android:text="@{news.date}"
-                android:textAlignment="textEnd"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/tvAuthor"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                tools:text="@tools:sample/us_zipcodes" />
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:text="@{ExtensionFunctions.toSpanned(news.title)}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvAuthor"
+            tools:text="@tools:sample/lorem/random" />
 
-            <TextView
-                android:id="@+id/tvAuthor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:elevation="@dimen/cardview_default_elevation"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{news.author}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="@tools:sample/full_names" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="@{news.comment}"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@tools:sample/lorem/random" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvAuthor"
+            app:srcCompat="@drawable/ic_favorite"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
