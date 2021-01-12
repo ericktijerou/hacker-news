@@ -1,6 +1,8 @@
 package com.ericktijerou.hackernews.data.cache
 
+import androidx.paging.DataSource
 import com.ericktijerou.hackernews.data.cache.dao.NewsDao
+import com.ericktijerou.hackernews.data.cache.entity.NewsEntity
 import com.ericktijerou.hackernews.data.cache.entity.toData
 import com.ericktijerou.hackernews.data.cache.system.PreferencesHelper
 import com.ericktijerou.hackernews.data.entity.NewsModel
@@ -15,7 +17,7 @@ class NewsDataStore(
         private const val EXPIRATION_TIME = (60 * 10 * 1000).toLong()
     }
 
-    suspend fun getNewsList(): List<NewsModel> {
+    fun getNewsList(): DataSource.Factory<Int, NewsModel> {
         return newsDao.getAll().map { it.toData() }
     }
 
@@ -23,11 +25,15 @@ class NewsDataStore(
         return newsDao.getNewsById(newsId).toData()
     }
 
-    suspend fun saveNewsList(newsList: List<NewsModel>): List<NewsModel> {
+    suspend fun saveNewsList(newsList: List<NewsModel>) {
         newsDao.deleteAll()
         newsDao.insertAll(newsList.map { it.toLocal() })
         setLastCacheTime(System.currentTimeMillis())
-        return newsDao.getAll().map { it.toData() }
+    }
+
+    suspend fun insertNewsList(newsList: List<NewsModel>) {
+        newsDao.insertAll(newsList.map { it.toLocal() })
+        setLastCacheTime(System.currentTimeMillis())
     }
 
     private fun setLastCacheTime(lastCache: Long) {

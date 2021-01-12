@@ -72,4 +72,3 @@ fun String.getRelativeTime(): String {
 
     return relativeTime.toString()
 }
-

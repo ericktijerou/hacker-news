@@ -10,9 +10,9 @@ class NewsCloudStore(private val api: HackerNewsApi,
                      private val networkConnectivity: NetworkConnectivity
 ) {
 
-    suspend fun getNewsList(): List<NewsModel> {
+    suspend fun fetchNewsList(page: Int, pageSize: Int): List<NewsModel> {
         return if (networkConnectivity.isInternetOn()) {
-            api.getNewsList().let { response ->
+            api.getNewsList(page, pageSize).let { response ->
                 response.body()?.hits?.map { it.toData() } ?: throw NotFoundException()
             }
         } else {

@@ -2,54 +2,55 @@ package com.ericktijerou.hackernews.presentation.ui.feed
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import com.ericktijerou.hackernews.R
-import com.ericktijerou.hackernews.presentation.ui.util.observe
+import androidx.lifecycle.Observer
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ericktijerou.hackernews.databinding.ActivityFeedBinding
+import com.ericktijerou.hackernews.domain.entity.News
+import com.ericktijerou.hackernews.presentation.ui.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import com.ericktijerou.hackernews.databinding.ActivityFeedBinding as Binding
 
-class FeedActivity : AppCompatActivity() {
+class FeedActivity : BaseActivity<ActivityFeedBinding>() {
 
-    private val binding by lazy {
-        DataBindingUtil.setContentView<Binding>(this, R.layout.activity_feed)
-    }
+    override fun getViewBinding(): ActivityFeedBinding = ActivityFeedBinding.inflate(layoutInflater)
 
     private val viewModel by viewModel<FeedViewModel>()
 
+    private val feedAdapter by lazy {
+        FeedPagedListAdapter(::goToStory)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        this.let { activity ->
-            binding.apply {
-                lifecycleOwner = activity
-                viewModel = activity.viewModel
-                rvFeed.adapter = FeedAdapter(::goToStory)
+        setContentView(mViewBinding.root)
+        mViewBinding.apply {
+            rvFeed.apply {
+                layoutManager = LinearLayoutManager(this@FeedActivity)
+                adapter = feedAdapter
             }
         }
         observeNews()
         observeError()
+        viewModel.load(0)
     }
 
     private fun observeNews() {
-        viewModel.news.observe(this) { news ->
-            Timber.d("news = $news")
-            binding.rvFeed.adapter?.let {
-                (it as FeedAdapter).updateNewsList(news)
-            }
-        }
+        viewModel.news.observe(this, newsStateObserver)
     }
 
     private fun observeError() {
-        viewModel.error.observe(this) {
-            Timber.e(it)
-            Toast.makeText(
-                this@FeedActivity,
-                R.string.load_news_error,
-                Toast.LENGTH_LONG
-            ).show()
+
+    }
+
+    private val newsStateObserver = Observer<PagedList<News>> { list ->
+        feedAdapter.submitList(list) {
+            val layoutManager = (mViewBinding.rvFeed.layoutManager as LinearLayoutManager)
+            val position = layoutManager.findFirstCompletelyVisibleItemPosition()
+            if (position != RecyclerView.NO_POSITION) {
+                mViewBinding.rvFeed.scrollToPosition(position)
+            }
         }
     }
 

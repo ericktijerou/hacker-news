@@ -21,6 +21,7 @@ import Dependencies.kotlinCoroutinesTest
 import Dependencies.kotlinSerializationRuntime
 import Dependencies.kotlinStdLib
 import Dependencies.leakCanary
+import Dependencies.lifecycle
 import Dependencies.materialDesign
 import Dependencies.mockk
 import Dependencies.okHttp
@@ -89,6 +90,9 @@ android {
         }
     }
 
+    viewBinding {
+        isEnabled = true
+    }
     dataBinding {
         isEnabled = true
     }
@@ -100,6 +104,10 @@ android {
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_1_8
         sourceCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     sourceSets {
@@ -124,6 +132,7 @@ dependencies {
     implementation(androidTestEspressoCore)
     implementation(androidKtx)
     implementation(paging)
+    implementation(lifecycle)
 
     implementation(okHttp)
     implementation(okHttpInterceptor)

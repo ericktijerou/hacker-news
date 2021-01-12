@@ -53,8 +53,7 @@
                 android:background="@android:color/transparent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="10"
-                tools:listitem="@layout/item_feed"
-                android:visibility="@{viewModel.news.size > 0 ? View.VISIBLE : View.GONE}"/>
+                tools:listitem="@layout/item_feed"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

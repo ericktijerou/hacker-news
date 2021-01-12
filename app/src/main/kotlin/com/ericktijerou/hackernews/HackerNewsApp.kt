@@ -6,9 +6,14 @@ import com.ericktijerou.hackernews.core.listByElementsOf
 import com.ericktijerou.hackernews.data.di.dataModules
 import com.ericktijerou.hackernews.domain.di.domainModules
 import com.ericktijerou.hackernews.presentation.di.presentationModules
+import com.ericktijerou.hackernews.presentation.ui.feed.FeedViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
+import org.koin.dsl.module
 import timber.log.Timber
 
 open class HackerNewsApp : Application() {
@@ -31,7 +36,12 @@ open class HackerNewsApp : Application() {
         listByElementsOf<Module>(
             dataModules,
             domainModules,
-            presentationModules
+            presentationModules,
+            appModule
         )
+    }
+
+    private val appModule = module {
+        factory { CoroutineScope(Dispatchers.IO) }
     }
 }

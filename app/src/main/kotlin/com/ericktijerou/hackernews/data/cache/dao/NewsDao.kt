@@ -1,5 +1,6 @@
 package com.ericktijerou.hackernews.data.cache.dao
 
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,7 +11,7 @@ import com.ericktijerou.hackernews.data.cache.entity.NewsEntity
 interface NewsDao {
 
     @Query("SELECT * FROM News")
-    suspend fun getAll(): List<NewsEntity>
+    fun getAll(): DataSource.Factory<Int, NewsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(newsList: List<NewsEntity>)
