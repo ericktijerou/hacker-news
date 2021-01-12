@@ -13,33 +13,26 @@ class FeedViewModel(
 
     private val _loading = MutableLiveData<Boolean>()
     private val _error = MutableLiveData<Throwable>()
+    private val _news = MutableLiveData<Long>()
 
     val loading: LiveData<Boolean> get() = _loading
     val error: LiveData<Throwable> get() = _error
-
-    private val liveData = MutableLiveData<Long>()
-
-    private val result = Transformations.map(liveData) {
-        interactor.getNewsList()
+    private val result = Transformations.map(_news) { interactor.getNewsList() }
+    val news = result.switchMap {
+        it.pagedList
     }
 
-    val news = result.switchMap { it.pagedList }
-
-    fun load(delay: Long) {
-        liveData.value = delay
+    fun load() {
+        _news.value = 0
     }
 
-    fun getFeed(refresh: Boolean = false) {
- /*       launch {
-            try {
-                _loading.value = true
-                _news.value = interactor.getNewsList(refresh)
-            } catch (exception: Exception) {
-                _error.value = exception
-            } finally {
-                _loading.value = false
-            }
-        }*/
+    fun refreshFeed() {
+        try {
+            _loading.value = true
+            _news.value = 0
+        } catch (exception: Exception) {
+            _error.value = exception
+        }
     }
 
 }
