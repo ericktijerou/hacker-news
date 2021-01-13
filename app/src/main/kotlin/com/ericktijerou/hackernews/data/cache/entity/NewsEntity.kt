@@ -3,23 +3,32 @@ package com.ericktijerou.hackernews.data.cache.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.ericktijerou.hackernews.data.entity.NewsModel
+import com.ericktijerou.hackernews.domain.entity.News
 
 @Entity(tableName = "News")
 data class NewsEntity(
-    @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    @PrimaryKey var id: String,
     val date: String,
     val title: String,
     val storyTitle: String,
-    val storyId: Long,
     val author: String,
-    val comment: String
+    val url: String
 )
 
 fun NewsEntity.toData() = NewsModel(
+    id = id,
     date = date,
     title = title,
     storyTitle = storyTitle,
-    storyId = storyId,
     author = author,
-    comment = comment
+    url = url
+)
+
+fun NewsEntity.toDomain() = News(
+    id = id,
+    date = date,
+    title = title,
+    storyTitle = storyTitle,
+    author = author,
+    url = url
 )

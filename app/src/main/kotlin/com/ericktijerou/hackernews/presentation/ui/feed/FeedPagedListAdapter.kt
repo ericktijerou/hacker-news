@@ -17,11 +17,15 @@ import koleton.api.generateSkeleton
 import koleton.custom.KoletonView
 
 class FeedPagedListAdapter(
-    private val onItemClick: (View, Long) -> Unit
+    private val onItemClick: (View, String) -> Unit
 ) : PagedListAdapter<News, RecyclerView.ViewHolder>(
     DIFF_CALLBACK
 ) {
     private var state = LoadingState.NONE
+
+    init {
+        setHasStableIds(true)
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
@@ -72,18 +76,38 @@ class FeedPagedListAdapter(
         }
     }
 
-    inner class FeedViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.clContainer) {
+    inner class FeedViewHolder(private val binding: ItemFeedBinding) : CustomViewHolder(binding.clContainer) {
         fun bindView(news: News?) {
             news?.apply {
-                binding.clContainer.setOnClickListener { onItemClick(it, storyId.orZero()) }
+                binding.clContainer.setOnClickListener { onItemClick(it, url) }
                 binding.tvTitle.text = title.toSpanned()
                 binding.tvAuthor.text = author
                 binding.tvTime.text = date.getRelativeTime()
             }
         }
+
+        override fun recycle() {
+            binding.clContainer.setOnClickListener(null)
+            binding.tvTitle.text = null
+            binding.tvAuthor.text = null
+            binding.tvTime.text = null
+        }
     }
 
-    class SkeletonViewHolder(val koletonView: KoletonView) : RecyclerView.ViewHolder(koletonView)
+    class SkeletonViewHolder(val koletonView: KoletonView) : CustomViewHolder(koletonView) {
+        override fun recycle() {
+            koletonView.hideSkeleton()
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        (holder as CustomViewHolder).recycle()
+    }
+
+    fun getItemIdByPosition(position: Int): String {
+        return getItem(position)?.id.orEmpty()
+    }
 
     companion object {
         private const val TYPE_VIEW = 1
@@ -91,7 +115,7 @@ class FeedPagedListAdapter(
 
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<News>() {
             override fun areItemsTheSame(oldItem: News, newItem: News) =
-                oldItem.storyId == newItem.storyId
+                oldItem.id == newItem.id
 
 
             override fun areContentsTheSame(oldItem: News, newItem: News) =

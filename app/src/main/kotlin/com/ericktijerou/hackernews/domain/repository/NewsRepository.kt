@@ -5,4 +5,5 @@ import com.ericktijerou.hackernews.domain.entity.News
 
 interface NewsRepository {
     fun getNewsList(actionType: Int): Listing<News>
+    suspend fun deleteNewsById(id: String)
 }

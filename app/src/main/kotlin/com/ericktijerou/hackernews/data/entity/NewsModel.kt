@@ -4,28 +4,28 @@ import com.ericktijerou.hackernews.data.cache.entity.NewsEntity
 import com.ericktijerou.hackernews.domain.entity.News
 
 data class NewsModel(
+    val id: String,
     val date: String,
     val title: String,
     val storyTitle: String,
-    val storyId: Long,
     val author: String,
-    val comment: String
+    val url: String
 )
 
 fun NewsModel.toLocal() = NewsEntity(
+    id = id,
     date = date,
     title = title,
     storyTitle = storyTitle,
-    storyId = storyId,
     author = author,
-    comment = comment
+    url = url
 )
 
 fun NewsModel.toDomain() = News(
+    id = id,
     date = date,
     title = title,
     storyTitle = storyTitle,
-    storyId = storyId,
     author = author,
-    comment = comment
+    url = url
 )

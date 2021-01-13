@@ -8,6 +8,8 @@ import org.koin.dsl.module
 internal val cacheModule = module {
     single { SystemDatabase.newInstance(get()) }
     single { get<SystemDatabase>().newsDao() }
+    single { get<SystemDatabase>().favoriteNewsDao() }
+    single { get<SystemDatabase>().blockNewsDao() }
     single { PreferencesHelper(get()) }
-    single { NewsDataStore(get(), get()) }
+    single { NewsDataStore(get(), get(), get(), get()) }
 }

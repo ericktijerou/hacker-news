@@ -27,4 +27,10 @@ class FeedViewModel(
     fun loadNews(@ActionType actionType: Int) {
         _news.value = actionType
     }
+
+    fun deleteNewsById(id: String) {
+        launch {
+            interactor.deleteNewsById(id)
+        }
+    }
 }

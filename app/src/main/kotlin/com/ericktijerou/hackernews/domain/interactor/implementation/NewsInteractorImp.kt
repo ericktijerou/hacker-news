@@ -12,4 +12,8 @@ class NewsInteractorImp(
     override fun getNewsList(actionType: Int): Listing<News> {
         return repository.getNewsList(actionType)
     }
+
+    override suspend fun deleteNewsById(id: String) {
+        return repository.deleteNewsById(id)
+    }
 }

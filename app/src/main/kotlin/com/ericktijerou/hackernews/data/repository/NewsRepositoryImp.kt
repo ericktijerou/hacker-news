@@ -44,4 +44,8 @@ class NewsRepositoryImp(
             refreshState = refreshState
         )
     }
+
+    override suspend fun deleteNewsById(id: String) {
+        dataStore.deleteById(id)
+    }
 }

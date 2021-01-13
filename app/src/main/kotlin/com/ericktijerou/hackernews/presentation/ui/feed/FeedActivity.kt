@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ericktijerou.hackernews.R
@@ -31,19 +33,24 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mViewBinding.root)
-        mViewBinding.apply {
-            rvFeed.apply {
-                layoutManager = LinearLayoutManager(this@FeedActivity)
-                adapter = feedAdapter
-            }
-            swipeContainer.setOnRefreshListener {
-                viewModel.loadNews(ActionType.REFRESH)
-            }
-        }
         observeLoading()
-        observeNews()
+        initRecyclerView()
+        mViewBinding.swipeContainer.setOnRefreshListener { viewModel.loadNews(ActionType.REFRESH) }
         observeError()
         viewModel.loadNews(ActionType.LOAD)
+    }
+
+    private fun initRecyclerView() {
+        mViewBinding.rvFeed.apply {
+            layoutManager = LinearLayoutManager(this@FeedActivity)
+            adapter = feedAdapter
+            itemAnimator = DefaultItemAnimator()
+            val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback {
+                viewModel.deleteNewsById(feedAdapter.getItemIdByPosition(it.adapterPosition))
+            })
+            itemTouchHelper.attachToRecyclerView(this)
+        }
+        observeNews()
     }
 
     private fun observeNews() {
@@ -82,7 +89,8 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         }
     }
 
-    private fun goToStory(view: View, newsId: Long) {
+    private fun goToStory(view: View, url: String) {
+
     }
 
     companion object {
