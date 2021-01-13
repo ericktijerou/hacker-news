@@ -14,7 +14,7 @@ import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ActivityFeedBinding
 import com.ericktijerou.hackernews.domain.entity.News
-import com.ericktijerou.hackernews.presentation.ui.BaseActivity
+import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.detail.WebViewActivity
 import com.ericktijerou.hackernews.presentation.ui.util.observe
 import com.ericktijerou.hackernews.presentation.ui.util.startNewActivity

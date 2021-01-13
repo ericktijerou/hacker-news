@@ -1,4 +1,4 @@
-package com.ericktijerou.hackernews.presentation.ui
+package com.ericktijerou.hackernews.presentation.ui.util
 
 import androidx.test.espresso.idling.CountingIdlingResource
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.switchMap
 import com.ericktijerou.hackernews.core.ActionType
 import com.ericktijerou.hackernews.domain.interactor.NewsInteractor
-import com.ericktijerou.hackernews.presentation.ui.CoroutinesViewModel
+import com.ericktijerou.hackernews.presentation.ui.util.CoroutinesViewModel
 
 class FeedViewModel(
     private val interactor: NewsInteractor
@@ -33,7 +33,7 @@ class FeedViewModel(
         _news.postValue(ActionType.REFRESH)
     }
 
-    private fun deleteAllNews() {
+    fun deleteAllNews() {
         launch {
             interactor.deleteAllNews()
         }

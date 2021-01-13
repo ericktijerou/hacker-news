@@ -16,7 +16,7 @@ import com.ericktijerou.hackernews.core.NetworkConnectivity
 import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ActivityDetailBinding
-import com.ericktijerou.hackernews.presentation.ui.BaseActivity
+import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.feed.FeedActivity.Companion.URL_EXTRA
 
 class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
