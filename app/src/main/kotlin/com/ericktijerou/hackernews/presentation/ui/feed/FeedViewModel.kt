@@ -21,11 +21,22 @@ class FeedViewModel(
     val news = result.switchMap {
         it.pagedList
     }
-    val loadingState = result.switchMap { it.loadingState }
+    val networkState = result.switchMap { it.networkState }
 
 
-    fun loadNews(@ActionType actionType: Int) {
-        _news.value = actionType
+    fun loadNews() {
+        _news.postValue(ActionType.LOAD)
+    }
+
+    fun refreshNews() {
+        deleteAllNews()
+        _news.postValue(ActionType.REFRESH)
+    }
+
+    fun deleteAllNews() {
+        launch {
+            interactor.deleteAllNews()
+        }
     }
 
     fun deleteNewsById(id: String) {

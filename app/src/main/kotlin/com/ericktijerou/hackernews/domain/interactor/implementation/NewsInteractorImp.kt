@@ -16,4 +16,8 @@ class NewsInteractorImp(
     override suspend fun deleteNewsById(id: String) {
         return repository.deleteNewsById(id)
     }
+
+    override suspend fun deleteAllNews() {
+        return repository.deleteAllNews()
+    }
 }

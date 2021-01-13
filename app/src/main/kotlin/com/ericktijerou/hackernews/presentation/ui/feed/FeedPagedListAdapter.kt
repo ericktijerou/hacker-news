@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.ericktijerou.hackernews.R
-import com.ericktijerou.hackernews.core.LoadingState
-import com.ericktijerou.hackernews.core.orZero
+import com.ericktijerou.hackernews.core.Status
 import com.ericktijerou.hackernews.databinding.ItemFeedBinding
 import com.ericktijerou.hackernews.domain.entity.News
 import com.ericktijerou.hackernews.presentation.ui.util.getRelativeTime
@@ -21,11 +19,7 @@ class FeedPagedListAdapter(
 ) : PagedListAdapter<News, RecyclerView.ViewHolder>(
     DIFF_CALLBACK
 ) {
-    private var state = LoadingState.NONE
-
-    init {
-        setHasStableIds(true)
-    }
+    private var state = Status.NONE
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
@@ -54,13 +48,13 @@ class FeedPagedListAdapter(
         }
     }
 
-    private fun hasExtraRow() = state != LoadingState.NONE && state != LoadingState.LOADED
+    private fun hasExtraRow() = state != Status.NONE && state != Status.LOADED
 
     override fun getItemCount(): Int {
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
-    fun setState(@LoadingState newState: Int) {
+    fun setState(@Status newState: Int) {
         val previousState = this.state
         val hadExtraRow = hasExtraRow()
         this.state = newState

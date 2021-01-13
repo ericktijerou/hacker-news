@@ -41,7 +41,7 @@
                 android:id="@+id/rvFeed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="vertical"
+                android:scrollbars="none"
                 android:background="@android:color/transparent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="10"

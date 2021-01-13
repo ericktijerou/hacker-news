@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ericktijerou.hackernews.R
 import com.ericktijerou.hackernews.core.ActionType
-import com.ericktijerou.hackernews.core.LoadingState
+import com.ericktijerou.hackernews.core.Status
 import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ActivityFeedBinding
@@ -35,9 +35,12 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         setContentView(mViewBinding.root)
         observeLoading()
         initRecyclerView()
-        mViewBinding.swipeContainer.setOnRefreshListener { viewModel.loadNews(ActionType.REFRESH) }
+        mViewBinding.swipeContainer.setOnRefreshListener {
+            viewModel.refreshNews()
+            feedAdapter.submitList(null)
+        }
         observeError()
-        viewModel.loadNews(ActionType.LOAD)
+        viewModel.loadNews()
     }
 
     private fun initRecyclerView() {
@@ -68,13 +71,12 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     }
 
     private fun observeLoading() {
-        viewModel.loadingState.observe(this) {
-            when (it) {
-                LoadingState.INITIAL_LOADED -> mViewBinding.indeterminateBar.gone()
-                LoadingState.INITIAL_LOADING -> mViewBinding.indeterminateBar.visible()
-                LoadingState.REFRESH_LOADED -> mViewBinding.swipeContainer.isRefreshing = false
-                LoadingState.REFRESH_LOADING -> mViewBinding.swipeContainer.isRefreshing = true
-                else -> feedAdapter.setState(it)
+        viewModel.networkState.observe(this) {
+            when (it.status) {
+                Status.INITIAL_LOADED -> mViewBinding.indeterminateBar.gone()
+                Status.INITIAL_LOADING -> mViewBinding.indeterminateBar.visible()
+                Status.REFRESH_LOADED -> mViewBinding.swipeContainer.isRefreshing = false
+                else -> feedAdapter.setState(it.status)
             }
         }
     }
