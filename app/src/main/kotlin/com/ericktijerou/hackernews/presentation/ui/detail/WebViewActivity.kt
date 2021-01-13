@@ -3,9 +3,11 @@ package com.ericktijerou.hackernews.presentation.ui.detail
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -25,6 +27,12 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mViewBinding.root)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = Uri.parse(url).host
+        }
+
         startLoaderAnimate()
         mViewBinding.webView.let {
             it.settings.javaScriptEnabled = true
@@ -93,5 +101,13 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
         mViewBinding.indeterminateBar.visible()
     }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
