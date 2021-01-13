@@ -7,4 +7,5 @@ interface NewsRepository {
     fun getNewsList(actionType: Int): Listing<News>
     suspend fun deleteNewsById(id: String)
     suspend fun deleteAllNews()
+    suspend fun setFavoriteNews(id: String, isFavorite: Boolean)
 }

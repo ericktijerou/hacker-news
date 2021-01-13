@@ -52,12 +52,18 @@
             app:layout_constraintBottom_toTopOf="@id/tvAuthor"
             android:text="@tools:sample/lorem/random" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:padding="6dp"
+        <ToggleButton
+            android:id="@+id/tbFavorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text=""
+            android:textOff=""
+            android:textOn=""
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:transitionGroup="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvAuthor"
-            app:srcCompat="@drawable/ic_favorite"/>
+            android:background="@drawable/button_favorite" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

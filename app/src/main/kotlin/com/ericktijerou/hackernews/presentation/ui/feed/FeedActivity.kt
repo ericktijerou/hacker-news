@@ -1,7 +1,6 @@
 package com.ericktijerou.hackernews.presentation.ui.feed
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
@@ -29,7 +28,7 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     private val viewModel by viewModel<FeedViewModel>()
 
     private val feedAdapter by lazy {
-        FeedPagedListAdapter(::goToDetail)
+        FeedPagedListAdapter(::goToDetail, ::onFavoriteClick)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +95,10 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         } else {
             toast(R.string.no_url)
         }
+    }
+
+    private fun onFavoriteClick(id: String, isFavorite: Boolean) {
+        viewModel.updateFavoriteItem(id, isFavorite)
     }
 
     companion object {

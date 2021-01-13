@@ -9,7 +9,8 @@ data class NewsModel(
     val title: String,
     val storyTitle: String,
     val author: String,
-    val url: String
+    val url: String,
+    var isFavorite: Boolean = false
 )
 
 fun NewsModel.toLocal() = NewsEntity(
@@ -18,7 +19,8 @@ fun NewsModel.toLocal() = NewsEntity(
     title = title,
     storyTitle = storyTitle,
     author = author,
-    url = url
+    url = url,
+    isFavorite = isFavorite
 )
 
 fun NewsModel.toDomain() = News(
@@ -27,5 +29,6 @@ fun NewsModel.toDomain() = News(
     title = title,
     storyTitle = storyTitle,
     author = author,
-    url = url
+    url = url,
+    isFavorite = isFavorite
 )

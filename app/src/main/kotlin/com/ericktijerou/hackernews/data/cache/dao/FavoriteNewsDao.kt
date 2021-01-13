@@ -1,9 +1,6 @@
 package com.ericktijerou.hackernews.data.cache.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.ericktijerou.hackernews.data.cache.entity.FavoriteNewsEntity
 
 @Dao
@@ -13,4 +10,7 @@ interface FavoriteNewsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavorites(vararg favoriteNews: FavoriteNewsEntity)
+
+    @Delete
+    suspend fun deleteFavorites(vararg favoriteNews: FavoriteNewsEntity)
 }

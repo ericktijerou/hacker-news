@@ -20,4 +20,8 @@ class NewsInteractorImp(
     override suspend fun deleteAllNews() {
         return repository.deleteAllNews()
     }
+
+    override suspend fun setFavoriteNews(id: String, isFavorite: Boolean) {
+        return repository.setFavoriteNews(id, isFavorite)
+    }
 }

@@ -52,6 +52,10 @@ class NewsRepositoryImp(
         dataStore.deleteAll()
     }
 
+    override suspend fun setFavoriteNews(id: String, isFavorite: Boolean) {
+        dataStore.setFavoriteNews(id, isFavorite)
+    }
+
     companion object {
         const val PER_PAGE_COUNT = 15
     }

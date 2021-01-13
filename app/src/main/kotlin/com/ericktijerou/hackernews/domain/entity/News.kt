@@ -6,5 +6,6 @@ data class News(
     val title: String,
     val storyTitle: String,
     val author: String,
-    val url: String
+    val url: String,
+    val isFavorite: Boolean
 )

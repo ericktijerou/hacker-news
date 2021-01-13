@@ -3,6 +3,9 @@ package com.ericktijerou.hackernews.presentation.ui.feed
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.BounceInterpolator
+import android.view.animation.ScaleAnimation
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +18,8 @@ import koleton.api.generateSkeleton
 import koleton.custom.KoletonView
 
 class FeedPagedListAdapter(
-    private val onItemClick: (String) -> Unit
+    private val onItemClick: (String) -> Unit,
+    private val onFavoriteItemClick: (String, Boolean) -> Unit
 ) : PagedListAdapter<News, RecyclerView.ViewHolder>(
     DIFF_CALLBACK
 ) {
@@ -77,7 +81,21 @@ class FeedPagedListAdapter(
                 binding.tvTitle.text = title.toSpanned()
                 binding.tvAuthor.text = author
                 binding.tvTime.text = date.getRelativeTime()
+                binding.tbFavorite.isChecked = isFavorite
+                binding.tbFavorite.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (buttonView.isPressed) {
+                        buttonView.startAnimation(buildAnimation())
+                        onFavoriteItemClick(id, isChecked)
+                    }
+                }
             }
+        }
+
+        private fun buildAnimation() : ScaleAnimation {
+            val scaleAnimation = ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+            scaleAnimation.duration = 500
+            scaleAnimation.interpolator = BounceInterpolator()
+            return scaleAnimation
         }
 
         override fun recycle() {

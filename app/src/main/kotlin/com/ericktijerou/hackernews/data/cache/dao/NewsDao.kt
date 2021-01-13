@@ -20,4 +20,7 @@ interface NewsDao {
 
     @Query("DELETE FROM News WHERE id = :newsId")
     suspend fun deleteById(newsId: String)
+
+    @Query("UPDATE News SET isFavorite = :isFavorite WHERE id LIKE :newsId")
+    suspend fun updateById(newsId: String, isFavorite: Boolean)
 }

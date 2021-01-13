@@ -12,7 +12,8 @@ data class NewsEntity(
     val title: String,
     val storyTitle: String,
     val author: String,
-    val url: String
+    val url: String,
+    val isFavorite: Boolean
 )
 
 fun NewsEntity.toData() = NewsModel(
@@ -21,14 +22,6 @@ fun NewsEntity.toData() = NewsModel(
     title = title,
     storyTitle = storyTitle,
     author = author,
-    url = url
-)
-
-fun NewsEntity.toDomain() = News(
-    id = id,
-    date = date,
-    title = title,
-    storyTitle = storyTitle,
-    author = author,
-    url = url
+    url = url,
+    isFavorite = isFavorite
 )

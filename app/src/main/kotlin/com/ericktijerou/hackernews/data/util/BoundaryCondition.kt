@@ -40,6 +40,10 @@ class BoundaryCondition(
                 try {
                     val newsList = service.fetchNewsList(lastRequestedPage, pageSize)
                     if (newsList.isNotEmpty()) {
+                        val favorites = cache.getFavoriteNews()
+                        favorites.forEach {
+                            newsList.find { newsId -> newsId.id == it }?.isFavorite = true
+                        }
                         cache.insertNewsList(newsList)
                         val loadedState = when {
                             lastRequestedPage == 0 && actionType == ActionType.LOAD -> NetworkState.INITIAL_LOADED

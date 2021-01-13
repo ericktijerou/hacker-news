@@ -33,7 +33,7 @@ class FeedViewModel(
         _news.postValue(ActionType.REFRESH)
     }
 
-    fun deleteAllNews() {
+    private fun deleteAllNews() {
         launch {
             interactor.deleteAllNews()
         }
@@ -42,6 +42,12 @@ class FeedViewModel(
     fun deleteNewsById(id: String) {
         launch {
             interactor.deleteNewsById(id)
+        }
+    }
+
+    fun updateFavoriteItem(id: String, isFavorite: Boolean) {
+        launch {
+            interactor.setFavoriteNews(id, isFavorite)
         }
     }
 }
