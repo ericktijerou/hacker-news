@@ -15,7 +15,7 @@ import koleton.api.generateSkeleton
 import koleton.custom.KoletonView
 
 class FeedPagedListAdapter(
-    private val onItemClick: (View, String) -> Unit
+    private val onItemClick: (String) -> Unit
 ) : PagedListAdapter<News, RecyclerView.ViewHolder>(
     DIFF_CALLBACK
 ) {
@@ -73,7 +73,7 @@ class FeedPagedListAdapter(
     inner class FeedViewHolder(private val binding: ItemFeedBinding) : CustomViewHolder(binding.clContainer) {
         fun bindView(news: News?) {
             news?.apply {
-                binding.clContainer.setOnClickListener { onItemClick(it, url) }
+                binding.clContainer.setOnClickListener { onItemClick(url) }
                 binding.tvTitle.text = title.toSpanned()
                 binding.tvAuthor.text = author
                 binding.tvTime.text = date.getRelativeTime()

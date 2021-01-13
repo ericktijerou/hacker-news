@@ -10,14 +10,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ericktijerou.hackernews.R
-import com.ericktijerou.hackernews.core.ActionType
 import com.ericktijerou.hackernews.core.Status
 import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ActivityFeedBinding
 import com.ericktijerou.hackernews.domain.entity.News
 import com.ericktijerou.hackernews.presentation.ui.BaseActivity
+import com.ericktijerou.hackernews.presentation.ui.detail.WebViewActivity
 import com.ericktijerou.hackernews.presentation.ui.util.observe
+import com.ericktijerou.hackernews.presentation.ui.util.startNewActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FeedActivity : BaseActivity<ActivityFeedBinding>() {
@@ -27,7 +28,7 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     private val viewModel by viewModel<FeedViewModel>()
 
     private val feedAdapter by lazy {
-        FeedPagedListAdapter(::goToStory)
+        FeedPagedListAdapter(::goToDetail)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,12 +91,13 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         }
     }
 
-    private fun goToStory(view: View, url: String) {
-
+    private fun goToDetail(url: String) {
+        startNewActivity(WebViewActivity::class) {
+            putExtra(URL_EXTRA, url)
+        }
     }
 
     companion object {
-        const val NEWS_ID = "news-id"
+        const val URL_EXTRA = "url_extra"
     }
-
 }

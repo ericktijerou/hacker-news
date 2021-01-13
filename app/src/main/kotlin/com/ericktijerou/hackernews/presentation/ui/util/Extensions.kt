@@ -19,13 +19,11 @@ import kotlin.reflect.KClass
 
 fun <T> Activity.startNewActivity(
     target: KClass<T>,
-    sharedViews: Array<Pair<View, String>>,
     extras: Intent.() -> Unit = {  }
 ) where T : Activity {
     val intent = Intent(this, target.java)
-    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, *sharedViews).toBundle()
     intent.apply { extras() }
-    this.startActivity(intent, options)
+    this.startActivity(intent)
 }
 
 fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, body: (T) -> Unit) {
