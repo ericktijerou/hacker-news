@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clContainer"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:foreground="?android:attr/selectableItemBackground"
@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textSize="@dimen/text_size_micro"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvAuthor"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,10 +35,12 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="@dimen/text_size_micro"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintBottom_toTopOf="@id/tvTime"
             app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginTop="4dp"
             android:text="@tools:sample/full_names" />
 
         <TextView
@@ -48,14 +51,15 @@
             android:maxLines="2"
             app:layout_constraintVertical_chainStyle="packed"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="@dimen/text_size_medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tvAuthor"
             android:text="@tools:sample/lorem/random" />
 
         <ToggleButton
             android:id="@+id/tbFavorite"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:text=""
             android:textOff=""
             android:textOn=""

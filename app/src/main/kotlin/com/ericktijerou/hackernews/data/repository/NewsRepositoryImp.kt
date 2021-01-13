@@ -56,6 +56,6 @@ class NewsRepositoryImp(
     }
 
     companion object {
-        const val PER_PAGE_COUNT = 10
+        const val PER_PAGE_COUNT = 15
     }
 }
