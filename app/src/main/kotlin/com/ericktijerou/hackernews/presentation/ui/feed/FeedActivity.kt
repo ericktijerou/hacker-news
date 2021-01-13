@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ericktijerou.hackernews.R
-import com.ericktijerou.hackernews.core.Status
-import com.ericktijerou.hackernews.core.gone
-import com.ericktijerou.hackernews.core.visible
+import com.ericktijerou.hackernews.core.*
 import com.ericktijerou.hackernews.databinding.ActivityFeedBinding
 import com.ericktijerou.hackernews.domain.entity.News
 import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
@@ -39,7 +37,6 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         mViewBinding.swipeContainer.setOnRefreshListener {
             viewModel.refreshNews()
         }
-        observeError()
         viewModel.loadNews()
     }
 
@@ -60,21 +57,25 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         viewModel.news.observe(this, newsStateObserver)
     }
 
-    private fun observeError() {
-        viewModel.error.observe(this) {
-            toast(R.string.load_news_error, Toast.LENGTH_LONG)
-        }
-    }
-
     private fun observeLoading() {
         viewModel.networkState.observe(this) {
             when (it.status) {
                 Status.INITIAL_LOADED -> mViewBinding.indeterminateBar.gone()
                 Status.INITIAL_LOADING -> mViewBinding.indeterminateBar.visible()
                 Status.REFRESH_LOADED -> mViewBinding.swipeContainer.isRefreshing = false
+                Status.FAILED -> showError(it.error)
                 else -> feedAdapter.setState(it.status)
             }
         }
+    }
+
+    private fun showError(e: Error?) {
+        val resId = when (e) {
+            is Error.NotFound -> R.string.no_news
+            is Error.Network -> R.string.no_internet
+            else -> R.string.load_news_error
+        }
+        toast(resId, Toast.LENGTH_LONG)
     }
 
     private val newsStateObserver = Observer<PagedList<News>> { list ->

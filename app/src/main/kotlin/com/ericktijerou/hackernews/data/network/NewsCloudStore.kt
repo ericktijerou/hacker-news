@@ -1,6 +1,7 @@
 package com.ericktijerou.hackernews.data.network
 
 import com.ericktijerou.hackernews.core.NetworkConnectivity
+import com.ericktijerou.hackernews.core.NetworkException
 import com.ericktijerou.hackernews.core.NotFoundException
 import com.ericktijerou.hackernews.data.entity.NewsModel
 import com.ericktijerou.hackernews.data.network.api.HackerNewsApi
@@ -16,7 +17,7 @@ class NewsCloudStore(private val api: HackerNewsApi,
                 response.body()?.hits?.map { it.toData() } ?: throw NotFoundException()
             }
         } else {
-            emptyList()
+            throw NetworkException()
         }
     }
 }

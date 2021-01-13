@@ -2,6 +2,6 @@
     <string name="app_name">Hacker News</string>
     <string name="load_news_error">Couldn\'t load news.</string>
     <string name="no_news">There are no news available</string>
-    <string name="load_news_detail_error">Couldn\'t load news details.</string>
     <string name="no_url">The item doesn\'t have a URL</string>
+    <string name="no_internet">No internet connection. Please check your connection.</string>
 </resources>
