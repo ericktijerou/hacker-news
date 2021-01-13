@@ -19,6 +19,7 @@ import com.ericktijerou.hackernews.presentation.ui.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.detail.WebViewActivity
 import com.ericktijerou.hackernews.presentation.ui.util.observe
 import com.ericktijerou.hackernews.presentation.ui.util.startNewActivity
+import com.ericktijerou.hackernews.presentation.ui.util.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FeedActivity : BaseActivity<ActivityFeedBinding>() {
@@ -62,11 +63,7 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
 
     private fun observeError() {
         viewModel.error.observe(this) {
-            Toast.makeText(
-                this@FeedActivity,
-                R.string.load_news_error,
-                Toast.LENGTH_LONG
-            ).show()
+            toast(R.string.load_news_error, Toast.LENGTH_LONG)
         }
     }
 
@@ -92,8 +89,12 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     }
 
     private fun goToDetail(url: String) {
-        startNewActivity(WebViewActivity::class) {
-            putExtra(URL_EXTRA, url)
+        if (url.isNotEmpty()) {
+            startNewActivity(WebViewActivity::class) {
+                putExtra(URL_EXTRA, url)
+            }
+        } else {
+            toast(R.string.no_url)
         }
     }
 

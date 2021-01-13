@@ -5,6 +5,8 @@ import android.content.Intent
 import android.text.Spanned
 import android.text.format.DateUtils
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.util.Pair
@@ -24,6 +26,10 @@ fun <T> Activity.startNewActivity(
     val intent = Intent(this, target.java)
     intent.apply { extras() }
     this.startActivity(intent)
+}
+
+fun Activity.toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(this, getString(resId), duration).show()
 }
 
 fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, body: (T) -> Unit) {
