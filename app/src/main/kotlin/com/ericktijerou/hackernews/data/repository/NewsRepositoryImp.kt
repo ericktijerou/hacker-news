@@ -13,11 +13,10 @@ import kotlinx.coroutines.CoroutineScope
 
 class NewsRepositoryImp(
     private val cloudStore: NewsCloudStore,
-    private val dataStore: NewsDataStore,
-    private val scope: CoroutineScope
+    private val dataStore: NewsDataStore
 ) : NewsRepository {
 
-    override fun getNewsList(actionType: Int): Listing<News> {
+    override fun getNewsList(actionType: Int, coroutineScope: CoroutineScope): Listing<News> {
         val config: PagedList.Config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
             .setPrefetchDistance(5)
@@ -31,7 +30,7 @@ class NewsRepositoryImp(
             cloudStore,
             dataStore,
             PER_PAGE_COUNT * 2,
-            scope
+            coroutineScope
         )
 
         val data = LivePagedListBuilder(dataSourceFactory, config)
@@ -57,6 +56,6 @@ class NewsRepositoryImp(
     }
 
     companion object {
-        const val PER_PAGE_COUNT = 15
+        const val PER_PAGE_COUNT = 10
     }
 }

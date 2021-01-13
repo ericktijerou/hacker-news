@@ -2,6 +2,7 @@ package com.ericktijerou.hackernews.presentation.ui.feed
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -17,6 +18,7 @@ import com.ericktijerou.hackernews.presentation.ui.detail.WebViewActivity
 import com.ericktijerou.hackernews.presentation.ui.util.observe
 import com.ericktijerou.hackernews.presentation.ui.util.startNewActivity
 import com.ericktijerou.hackernews.presentation.ui.util.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FeedActivity : BaseActivity<ActivityFeedBinding>() {
@@ -24,6 +26,8 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     override fun getViewBinding(): ActivityFeedBinding = ActivityFeedBinding.inflate(layoutInflater)
 
     private val viewModel by viewModel<FeedViewModel>()
+
+    val networkConnectivity: NetworkConnectivity by inject()
 
     private val feedAdapter by lazy {
         FeedPagedListAdapter(::goToDetail, ::onFavoriteClick)
@@ -35,7 +39,12 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         observeLoading()
         initRecyclerView()
         mViewBinding.swipeContainer.setOnRefreshListener {
-            viewModel.refreshNews()
+            hideErrorView()
+            if (networkConnectivity.isInternetOn()) {
+                viewModel.refreshNews()
+            } else {
+                showError(Error.Network)
+            }
         }
         viewModel.loadNews()
     }
@@ -60,13 +69,27 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     private fun observeLoading() {
         viewModel.networkState.observe(this) {
             when (it.status) {
-                Status.INITIAL_LOADED -> mViewBinding.indeterminateBar.gone()
-                Status.INITIAL_LOADING -> mViewBinding.indeterminateBar.visible()
-                Status.REFRESH_LOADED -> mViewBinding.swipeContainer.isRefreshing = false
+                Status.INITIAL_LOADED -> endLoaderAnimate()
+                Status.INITIAL_LOADING -> startLoaderAnimate()
+                Status.REFRESH_LOADED -> hideSwipeRefresh()
                 Status.FAILED -> showError(it.error)
                 else -> feedAdapter.setState(it.status)
             }
         }
+    }
+
+    private fun endLoaderAnimate() {
+        mViewBinding.lottieLoading.cancelAnimation()
+        mViewBinding.lottieLoading.gone()
+    }
+
+    private fun startLoaderAnimate() {
+        mViewBinding.lottieLoading.playAnimation()
+        mViewBinding.lottieLoading.visible()
+    }
+
+    private fun hideSwipeRefresh() {
+        mViewBinding.swipeContainer.isRefreshing = false
     }
 
     private fun showError(e: Error?) {
@@ -75,7 +98,24 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
             is Error.Network -> R.string.no_internet
             else -> R.string.load_news_error
         }
-        toast(resId, Toast.LENGTH_LONG)
+        endLoaderAnimate()
+        hideSwipeRefresh()
+        if (feedAdapter.itemCount != 0) {
+            toast(resId, Toast.LENGTH_SHORT)
+        } else {
+            showErrorView(resId)
+        }
+    }
+
+    private fun showErrorView(@StringRes resId: Int) {
+        mViewBinding.errorNetworkView.visible()
+        mViewBinding.lottieView.playAnimation()
+        mViewBinding.tvError.setText(resId)
+    }
+
+    private fun hideErrorView() {
+        mViewBinding.errorNetworkView.gone()
+        mViewBinding.lottieView.cancelAnimation()
     }
 
     private val newsStateObserver = Observer<PagedList<News>> { list ->

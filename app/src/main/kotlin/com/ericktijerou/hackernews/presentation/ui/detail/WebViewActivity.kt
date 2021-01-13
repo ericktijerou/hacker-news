@@ -18,11 +18,13 @@ import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ActivityDetailBinding
 import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.feed.FeedActivity.Companion.URL_EXTRA
+import org.koin.android.ext.android.inject
 
 class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
 
     private val url by lazy { intent.getStringExtra(URL_EXTRA).orEmpty() }
     private var isAlreadyCreated = false
+    val networkConnectivity : NetworkConnectivity by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,7 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
 
     override fun onResume() {
         super.onResume()
-        if (isAlreadyCreated && !NetworkConnectivity(applicationContext).isInternetOn()) {
+        if (isAlreadyCreated && !networkConnectivity.isInternetOn()) {
             isAlreadyCreated = false
             showErrorDialog(
                 "Error", "No internet connection. Please check your connection.",
@@ -94,11 +96,11 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
     }
 
     private fun endLoaderAnimate() {
-        mViewBinding.indeterminateBar.gone()
+        mViewBinding.lottieLoading.gone()
     }
 
     private fun startLoaderAnimate() {
-        mViewBinding.indeterminateBar.visible()
+        mViewBinding.lottieLoading.visible()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -23,7 +23,7 @@ class FeedViewModelTest: BaseViewModelTest() {
     fun `no interactions`() = runBlockingTest {
         every { newsObserver.onChanged(any()) } just Runs
         viewModel.news.observeForever(newsObserver)
-        coVerify(exactly = 0) { interactor.getNewsList(ActionType.LOAD) }
+        coVerify(exactly = 0) { interactor.getNewsList(ActionType.LOAD, any()) }
     }
 
     @ExperimentalCoroutinesApi

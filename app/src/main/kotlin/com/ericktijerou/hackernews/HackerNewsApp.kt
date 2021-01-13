@@ -32,12 +32,7 @@ open class HackerNewsApp : Application() {
         listByElementsOf<Module>(
             dataModules,
             domainModules,
-            presentationModules,
-            appModule
+            presentationModules
         )
-    }
-
-    private val appModule = module {
-        factory { CoroutineScope(Dispatchers.IO) }
     }
 }

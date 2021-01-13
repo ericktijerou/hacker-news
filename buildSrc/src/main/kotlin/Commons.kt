@@ -67,7 +67,7 @@ object Dependencies {
 
 object Versions {
     internal const val androidAppCompat = "1.0.2"
-    internal const val androidConstraintLayout = "1.1.3"
+    internal const val androidConstraintLayout = "2.0.0-beta6"
     internal const val androidCore = "1.0.2"
     internal const val androidGradlePlugin = "3.6.2"
     internal const val androidLiveData = "2.2.0"

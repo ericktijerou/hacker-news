@@ -1,9 +1,6 @@
 package com.ericktijerou.hackernews.presentation.ui.feed
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.ericktijerou.hackernews.core.ActionType
 import com.ericktijerou.hackernews.domain.interactor.NewsInteractor
 import com.ericktijerou.hackernews.presentation.ui.util.CoroutinesViewModel
@@ -17,7 +14,7 @@ class FeedViewModel(
 
     val error: LiveData<Throwable> get() = _error
 
-    private val result = Transformations.map(_news) { interactor.getNewsList(it) }
+    private val result = Transformations.map(_news) { interactor.getNewsList(it, viewModelScope) }
     val news = result.switchMap {
         it.pagedList
     }
