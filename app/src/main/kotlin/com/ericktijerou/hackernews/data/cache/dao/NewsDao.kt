@@ -10,7 +10,7 @@ import com.ericktijerou.hackernews.data.cache.entity.NewsEntity
 @Dao
 interface NewsDao {
 
-    @Query("SELECT * FROM News")
+    @Query("SELECT * FROM News ORDER BY date DESC")
     fun getAll(): DataSource.Factory<Int, NewsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
