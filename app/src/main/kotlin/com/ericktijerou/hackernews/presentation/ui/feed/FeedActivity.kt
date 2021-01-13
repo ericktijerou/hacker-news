@@ -37,7 +37,6 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         initRecyclerView()
         mViewBinding.swipeContainer.setOnRefreshListener {
             viewModel.refreshNews()
-            feedAdapter.submitList(null)
         }
         observeError()
         viewModel.loadNews()
