@@ -8,6 +8,7 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ericktijerou.hackernews.R
+import com.ericktijerou.hackernews.core.ActionType
 import com.ericktijerou.hackernews.core.LoadingState
 import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
@@ -35,11 +36,14 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
                 layoutManager = LinearLayoutManager(this@FeedActivity)
                 adapter = feedAdapter
             }
+            swipeContainer.setOnRefreshListener {
+                viewModel.loadNews(ActionType.REFRESH)
+            }
         }
         observeLoading()
         observeNews()
         observeError()
-        viewModel.refreshFeed()
+        viewModel.loadNews(ActionType.LOAD)
     }
 
     private fun observeNews() {
@@ -61,6 +65,8 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
             when (it) {
                 LoadingState.INITIAL_LOADED -> mViewBinding.indeterminateBar.gone()
                 LoadingState.INITIAL_LOADING -> mViewBinding.indeterminateBar.visible()
+                LoadingState.REFRESH_LOADED -> mViewBinding.swipeContainer.isRefreshing = false
+                LoadingState.REFRESH_LOADING -> mViewBinding.swipeContainer.isRefreshing = true
                 else -> feedAdapter.setState(it)
             }
         }

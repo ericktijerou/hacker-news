@@ -9,7 +9,8 @@ import androidx.annotation.IntDef
     LoadingState.LOADING,
     LoadingState.INITIAL_LOADING,
     LoadingState.INITIAL_LOADED,
-    LoadingState.FAILED
+    LoadingState.REFRESH_LOADING,
+    LoadingState.REFRESH_LOADED
 )
 
 annotation class LoadingState {
@@ -19,6 +20,7 @@ annotation class LoadingState {
         const val LOADING = 2
         const val INITIAL_LOADING= 4
         const val INITIAL_LOADED = 5
-        const val FAILED = 6
+        const val REFRESH_LOADING= 6
+        const val REFRESH_LOADED = 7
     }
 }

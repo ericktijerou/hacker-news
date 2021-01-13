@@ -21,6 +21,10 @@ class NewsDataStore(
         return newsDao.getAll().map { it.toData() }
     }
 
+    suspend fun deleteAll() {
+        return newsDao.deleteAll()
+    }
+
     suspend fun getNewsById(newsId: Long): NewsModel {
         return newsDao.getNewsById(newsId).toData()
     }

@@ -2,6 +2,7 @@ package com.ericktijerou.hackernews.data.repository
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import com.ericktijerou.hackernews.core.ActionType
 import com.ericktijerou.hackernews.core.LoadingState
 import com.ericktijerou.hackernews.data.cache.NewsDataStore
 import com.ericktijerou.hackernews.data.entity.toDomain
@@ -14,10 +15,11 @@ import kotlinx.coroutines.launch
 class NewsDataSource(
     private val cloudStore: NewsCloudStore,
     private val localStore: NewsDataStore,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val actionType: Int
 ) : PageKeyedDataSource<Int, News>() {
 
-    val loadingState = MutableLiveData<Int>()
+    val progressState = MutableLiveData<Int>()
 
     val initialLoad = MutableLiveData<Int>()
 
@@ -25,19 +27,33 @@ class NewsDataSource(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, News>
     ) {
-        loadingState.postValue(LoadingState.INITIAL_LOADING)
-        fetchData(0, params.requestedLoadSize) {
-            callback.onResult(it, null, 1)
-            loadingState.postValue(LoadingState.INITIAL_LOADED)
+        val loadingState = when (actionType) {
+            ActionType.REFRESH -> LoadingState.REFRESH_LOADING
+            else -> LoadingState.INITIAL_LOADING
         }
+        progressState.postValue(loadingState)
+        scope.launch(getJobErrorHandler()) {
+            localStore.deleteAll()
+            fetchData(0, params.requestedLoadSize) {
+                callback.onResult(it, null, 1)
+                val loadedState = when (actionType) {
+                    ActionType.REFRESH -> LoadingState.REFRESH_LOADED
+                    else -> LoadingState.INITIAL_LOADED
+                }
+                progressState.postValue(loadedState)
+            }
+        }
+
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, News>) {
-        loadingState.postValue(LoadingState.LOADING)
+        progressState.postValue(LoadingState.LOADING)
         val page = params.key
-        fetchData(page, params.requestedLoadSize) {
-            callback.onResult(it, page + 1)
-            loadingState.postValue(LoadingState.LOADED)
+        scope.launch(getJobErrorHandler()) {
+            fetchData(page, params.requestedLoadSize) {
+                callback.onResult(it, page + 1)
+                progressState.postValue(LoadingState.LOADED)
+            }
         }
     }
 
@@ -45,13 +61,11 @@ class NewsDataSource(
         // Ignored, since we only ever append to our initial load
     }
 
-    private fun fetchData(page: Int, pageSize: Int, callback: (List<News>) -> Unit) {
-        scope.launch(getJobErrorHandler()) {
-            val response = cloudStore.fetchNewsList(page, pageSize)
-            if (response.isNotEmpty()) {
-                localStore.insertNewsList(response)
-                callback(response.map { it.toDomain() })
-            }
+    private suspend fun fetchData(page: Int, pageSize: Int, callback: (List<News>) -> Unit) {
+        val response = cloudStore.fetchNewsList(page, pageSize)
+        if (response.isNotEmpty()) {
+            localStore.insertNewsList(response)
+            callback(response.map { it.toDomain() })
         }
     }
 

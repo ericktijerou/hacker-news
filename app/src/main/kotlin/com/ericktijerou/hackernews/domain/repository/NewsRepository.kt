@@ -4,5 +4,5 @@ import com.ericktijerou.hackernews.domain.entity.Listing
 import com.ericktijerou.hackernews.domain.entity.News
 
 interface NewsRepository {
-    fun getNewsList(): Listing<News>
+    fun getNewsList(actionType: Int): Listing<News>
 }

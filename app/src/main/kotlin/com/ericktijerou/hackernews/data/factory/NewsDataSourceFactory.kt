@@ -12,7 +12,8 @@ import kotlinx.coroutines.CoroutineScope
 class NewsDataSourceFactory (
     private val cloudStore: NewsCloudStore,
     private val dataStore: NewsDataStore,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val actionType: Int
 ) : DataSource.Factory<Int, News>() {
 
     val liveData = MutableLiveData<NewsDataSource>()
@@ -21,14 +22,15 @@ class NewsDataSourceFactory (
         val source = NewsDataSource(
             cloudStore,
             dataStore,
-            scope
+            scope,
+            actionType
         )
         liveData.postValue(source)
         return source
     }
 
     companion object {
-        private const val PAGE_SIZE = 10
+        private const val PAGE_SIZE = 15
 
         fun pagedListConfig() = PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)

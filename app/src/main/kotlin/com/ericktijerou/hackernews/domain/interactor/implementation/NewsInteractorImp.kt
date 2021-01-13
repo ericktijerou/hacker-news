@@ -9,7 +9,7 @@ class NewsInteractorImp(
     private val repository: NewsRepository
 ) : NewsInteractor {
 
-    override fun getNewsList(): Listing<News> {
-        return repository.getNewsList()
+    override fun getNewsList(actionType: Int): Listing<News> {
+        return repository.getNewsList(actionType)
     }
 }

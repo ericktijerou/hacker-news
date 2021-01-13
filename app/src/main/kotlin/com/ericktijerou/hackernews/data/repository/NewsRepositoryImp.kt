@@ -1,59 +1,47 @@
 package com.ericktijerou.hackernews.data.repository
 
-import androidx.annotation.MainThread
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.switchMap
 import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import com.ericktijerou.hackernews.core.NetworkConnectivity
 import com.ericktijerou.hackernews.data.cache.NewsDataStore
 import com.ericktijerou.hackernews.data.entity.toDomain
 import com.ericktijerou.hackernews.data.factory.NewsDataSourceFactory
+import com.ericktijerou.hackernews.data.network.NewsCloudStore
 import com.ericktijerou.hackernews.domain.entity.Listing
 import com.ericktijerou.hackernews.domain.entity.News
 import com.ericktijerou.hackernews.domain.repository.NewsRepository
+import kotlinx.coroutines.CoroutineScope
 
 class NewsRepositoryImp(
-    private val newsDataStore: NewsDataStore,
-    private val newsDataSourceFactory: NewsDataSourceFactory,
+    private val cloudStore: NewsCloudStore,
+    private val dataStore: NewsDataStore,
+    private val scope: CoroutineScope,
     private val networkConnectivity: NetworkConnectivity
 ) : NewsRepository {
 
-    @MainThread
-    override fun getNewsList(): Listing<News> {
-        val livePagedList = if (networkConnectivity.isInternetOn()) {
-            getDataFromRemote()
+    override fun getNewsList(actionType: Int): Listing<News> {
+        val factory = NewsDataSourceFactory(cloudStore, dataStore, scope, actionType)
+        val dataSourceFactory = if (networkConnectivity.isInternetOn()) {
+            factory
         } else {
-            getDataFromLocal()
+            dataStore.getNewsList().map { it.toDomain() }
         }
-        val refreshState = newsDataSourceFactory.liveData.switchMap {
+
+        val livePagedList =
+            LivePagedListBuilder(dataSourceFactory, NewsDataSourceFactory.pagedListConfig()).build()
+
+        val refreshState = factory.liveData.switchMap {
             it.initialLoad
         }
         return Listing(
             pagedList = livePagedList,
-            loadingState = newsDataSourceFactory.liveData.switchMap {
-                it.loadingState
+            loadingState = factory.liveData.switchMap {
+                it.progressState
             },
             refresh = {
-                newsDataSourceFactory.liveData.value?.invalidate()
+                factory.liveData.value?.invalidate()
             },
             refreshState = refreshState
         )
-    }
-
-
-    private fun getDataFromRemote(): LiveData<PagedList<News>> {
-        return LivePagedListBuilder(
-            newsDataSourceFactory,
-            NewsDataSourceFactory.pagedListConfig()
-        ).build()
-    }
-
-    private fun getDataFromLocal(): LiveData<PagedList<News>> {
-        val dataSourceFactory = newsDataStore.getNewsList().map { it.toDomain() }
-        return LivePagedListBuilder(
-            dataSourceFactory,
-            NewsDataSourceFactory.pagedListConfig()
-        ).build()
     }
 }
