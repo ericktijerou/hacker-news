@@ -29,6 +29,8 @@ object Dependencies {
     const val junit = "junit:junit:${Versions.junit}"
 
     const val koinTest = "org.koin:koin-test:${Versions.koin}"
+    const val archCoreTest = "android.arch.core:core-testing:1.1.1"
+    const val lottie = "com.airbnb.android:lottie:3.5.0"
     const val koinAndroidScope = "org.koin:koin-androidx-scope:${Versions.koin}"
     const val koinAndroidViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
 

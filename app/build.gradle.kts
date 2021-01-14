@@ -10,7 +10,7 @@ import Dependencies.androidTestExtJunit
 import Dependencies.androidTestRules
 import Dependencies.androidTestRunner
 import Dependencies.androidViewModel
-import Dependencies.glide
+import Dependencies.archCoreTest
 import Dependencies.junit
 import Dependencies.koinAndroidScope
 import Dependencies.koinAndroidViewModel
@@ -20,8 +20,8 @@ import Dependencies.kotlinCoroutinesCore
 import Dependencies.kotlinCoroutinesTest
 import Dependencies.kotlinSerializationRuntime
 import Dependencies.kotlinStdLib
-import Dependencies.leakCanary
 import Dependencies.lifecycle
+import Dependencies.lottie
 import Dependencies.materialDesign
 import Dependencies.mockk
 import Dependencies.okHttp
@@ -36,7 +36,6 @@ import Dependencies.retrofitScalarsConverter
 import Dependencies.roomCompiler
 import Dependencies.roomKtx
 import Dependencies.roomRuntime
-import Dependencies.timber
 
 plugins {
     id("com.android.application")
@@ -46,12 +45,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
 
     defaultConfig {
         applicationId = "erick.tijerou.hackernews"
         minSdkVersion(19)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -161,8 +160,8 @@ dependencies {
     implementation(kotlinCoroutinesCore)
     implementation(kotlinSerializationRuntime)
 
-    androidTestImplementation("android.arch.core:core-testing:1.1.0")
-    implementation("com.airbnb.android:lottie:3.5.0")
+    // Lottie
+    implementation(lottie)
 
     // Tests
     testImplementation(junit)
@@ -173,6 +172,7 @@ dependencies {
     testImplementation(kotlinCoroutinesTest)
 
     androidTestImplementation(koinTest)
+    androidTestImplementation(archCoreTest)
     androidTestImplementation(okhttpTls)
     androidTestImplementation(androidTestRules)
     androidTestImplementation(androidTestRunner)
