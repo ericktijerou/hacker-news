@@ -161,7 +161,6 @@ dependencies {
     implementation(kotlinCoroutinesCore)
     implementation(kotlinSerializationRuntime)
 
-    implementation("com.ericktijerou.koleton:koleton:0.8.1")
     androidTestImplementation("android.arch.core:core-testing:1.1.0")
     implementation("com.airbnb.android:lottie:3.5.0")
 

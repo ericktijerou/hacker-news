@@ -1,7 +1,6 @@
 package com.ericktijerou.hackernews.presentation.ui.feed
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
@@ -10,12 +9,13 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ericktijerou.hackernews.core.Status
+import com.ericktijerou.hackernews.core.gone
+import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ItemFeedBinding
+import com.ericktijerou.hackernews.databinding.ItemNetworkStateBinding
 import com.ericktijerou.hackernews.domain.entity.News
 import com.ericktijerou.hackernews.presentation.ui.util.getRelativeTime
 import com.ericktijerou.hackernews.presentation.ui.util.toSpanned
-import koleton.api.generateSkeleton
-import koleton.custom.KoletonView
 
 class FeedPagedListAdapter(
     private val onItemClick: (String) -> Unit,
@@ -28,7 +28,7 @@ class FeedPagedListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             TYPE_VIEW -> (holder as FeedViewHolder).bindView(getItem(position))
-            TYPE_SKELETON -> (holder as SkeletonViewHolder).koletonView.showSkeleton()
+            TYPE_NETWORK -> (holder as NetworkStateViewHolder).showProgress()
         }
     }
 
@@ -36,23 +36,28 @@ class FeedPagedListAdapter(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
-        val view = ItemFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return when (viewType) {
-            TYPE_VIEW -> FeedViewHolder(view)
-            TYPE_SKELETON -> SkeletonViewHolder(view.clContainer.generateSkeleton())
+            TYPE_VIEW -> {
+                val view = ItemFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedViewHolder(view)
+            }
+            TYPE_NETWORK -> {
+                val view = ItemNetworkStateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                NetworkStateViewHolder(view)
+            }
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
-            TYPE_SKELETON
+            TYPE_NETWORK
         } else {
             TYPE_VIEW
         }
     }
 
-    private fun hasExtraRow() = state != Status.NONE && state != Status.LOADED
+    private fun hasExtraRow() = state != Status.NONE && state != Status.LOADED && state != Status.FAILED
 
     override fun getItemCount(): Int {
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
@@ -74,10 +79,13 @@ class FeedPagedListAdapter(
         }
     }
 
-    inner class FeedViewHolder(private val binding: ItemFeedBinding) : CustomViewHolder(binding.clContainer) {
+    inner class FeedViewHolder(private val binding: ItemFeedBinding) : CustomViewHolder(binding.clItemContainer) {
+
+        val viewForeground = binding.viewForeground
+
         fun bindView(news: News?) {
             news?.apply {
-                binding.clContainer.setOnClickListener { onItemClick(url) }
+                binding.clItemContainer.setOnClickListener { onItemClick(url) }
                 binding.tvTitle.text = title.toSpanned()
                 binding.tvAuthor.text = author
                 binding.tvTime.text = date.getRelativeTime()
@@ -99,16 +107,23 @@ class FeedPagedListAdapter(
         }
 
         override fun recycle() {
-            binding.clContainer.setOnClickListener(null)
+            binding.clItemContainer.setOnClickListener(null)
             binding.tvTitle.text = null
             binding.tvAuthor.text = null
             binding.tvTime.text = null
         }
     }
 
-    class SkeletonViewHolder(val koletonView: KoletonView) : CustomViewHolder(koletonView) {
+    class NetworkStateViewHolder(private val binding: ItemNetworkStateBinding) : CustomViewHolder(binding.clProgressBar) {
+
+        fun showProgress() {
+            binding.lottieView.playAnimation()
+            binding.lottieView.visible()
+        }
+
         override fun recycle() {
-            koletonView.hideSkeleton()
+            binding.lottieView.cancelAnimation()
+            binding.lottieView.gone()
         }
     }
 
@@ -123,7 +138,7 @@ class FeedPagedListAdapter(
 
     companion object {
         private const val TYPE_VIEW = 1
-        private const val TYPE_SKELETON = 2
+        private const val TYPE_NETWORK = 2
 
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<News>() {
             override fun areItemsTheSame(oldItem: News, newItem: News) =

@@ -37,6 +37,10 @@ class BoundaryCondition(
         requestAndSaveData()
     }
 
+    override fun onItemAtFrontLoaded(itemAtFront: News) {
+        networkState.postValue(NetworkState.LOADED)
+    }
+
     private fun requestAndSaveData() {
         scope.launch(handler) {
             if (networkState.value != NetworkState.LOADING) {
@@ -48,12 +52,8 @@ class BoundaryCondition(
                         newsList.find { newsId -> newsId.id == it }?.isFavorite = true
                     }
                     cache.insertNewsList(newsList)
-                    val loadedState = when {
-                        lastRequestedPage == 0 && actionType == ActionType.LOAD -> NetworkState.INITIAL_LOADED
-                        lastRequestedPage == 0 && actionType == ActionType.REFRESH -> NetworkState.REFRESH_LOADED
-                        else -> NetworkState.LOADED
-                    }
-                    networkState.postValue(loadedState)
+                    if (actionType == ActionType.LOAD) networkState.postValue(NetworkState.INITIAL_LOADED)
+                    else if (actionType == ActionType.REFRESH) networkState.postValue(NetworkState.REFRESH_LOADED)
                     lastRequestedPage++
                 }
             }

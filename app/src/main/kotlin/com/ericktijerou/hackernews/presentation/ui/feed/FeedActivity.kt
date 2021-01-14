@@ -5,21 +5,19 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.ericktijerou.hackernews.R
 import com.ericktijerou.hackernews.core.*
 import com.ericktijerou.hackernews.databinding.ActivityFeedBinding
 import com.ericktijerou.hackernews.domain.entity.News
-import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.detail.WebViewActivity
+import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.util.observe
 import com.ericktijerou.hackernews.presentation.ui.util.startNewActivity
 import com.ericktijerou.hackernews.presentation.ui.util.toast
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class FeedActivity : BaseActivity<ActivityFeedBinding>() {
 
@@ -55,6 +53,7 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
             layoutManager = LinearLayoutManager(this@FeedActivity)
             adapter = feedAdapter
             itemAnimator = DefaultItemAnimator()
+            addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
             val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback {
                 viewModel.deleteNewsById(feedAdapter.getItemIdByPosition(it.adapterPosition))
             })
@@ -73,7 +72,10 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
                 Status.INITIAL_LOADED -> endLoaderAnimate()
                 Status.INITIAL_LOADING -> startLoaderAnimate()
                 Status.REFRESH_LOADED -> hideSwipeRefresh()
-                Status.FAILED -> showError(it.error)
+                Status.FAILED -> {
+                    showError(it.error)
+                    feedAdapter.setState(it.status)
+                }
                 else -> feedAdapter.setState(it.status)
             }
         }
