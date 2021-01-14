@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:title="@string/app_name"
+                app:title="@string/label_home"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -50,8 +50,8 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieLoading"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="centerCrop"
             app:lottie_fileName="loading.json"
             app:lottie_loop="true"
