@@ -61,43 +61,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"/>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottieView"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tvError"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_fileName="spaceman.json"
-            app:lottie_loop="true"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintVertical_chainStyle="packed"/>
-
-        <TextView
-            android:id="@+id/tvError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_news"
-            android:textSize="@dimen/text_size_small"
-            android:visibility="gone"
-            android:padding="@dimen/margin_padding_size_medium"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lottieView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"
-            tools:visibility="visible"
-            app:layout_constraintVertical_chainStyle="packed"/>
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/errorNetworkView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="tvError, lottieView"
-            android:visibility="gone"/>
+        <include
+            android:id="@+id/errorInclude"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/network_error" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -12,6 +12,8 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.StringRes
+import com.ericktijerou.hackernews.R
 import com.ericktijerou.hackernews.core.NetworkConnectivity
 import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
@@ -23,8 +25,7 @@ import org.koin.android.ext.android.inject
 class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
 
     private val url by lazy { intent.getStringExtra(URL_EXTRA).orEmpty() }
-    private var isAlreadyCreated = false
-    val networkConnectivity : NetworkConnectivity by inject()
+    private val networkConnectivity : NetworkConnectivity by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,15 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
             setDisplayShowHomeEnabled(true)
             title = Uri.parse(url).host
         }
+        if (networkConnectivity.isInternetOn()) {
+            hideErrorView()
+            initView()
+        } else {
+            showErrorView(R.string.no_internet)
+        }
+    }
 
+    private fun initView() {
         startLoaderAnimate()
         mViewBinding.webView.let {
             it.settings.javaScriptEnabled = true
@@ -57,19 +66,24 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
         }
     }
 
-    override fun getViewBinding(): ActivityDetailBinding =
-        ActivityDetailBinding.inflate(layoutInflater)
+    private fun showErrorView(@StringRes resId: Int) {
+        mViewBinding.errorInclude.run {
+            errorNetworkGroup.visible()
+            lottieView.playAnimation()
+            tvError.setText(resId)
+        }
 
-    override fun onResume() {
-        super.onResume()
-        if (isAlreadyCreated && !networkConnectivity.isInternetOn()) {
-            isAlreadyCreated = false
-            showErrorDialog(
-                "Error", "No internet connection. Please check your connection.",
-                this@WebViewActivity
-            )
+    }
+
+    private fun hideErrorView() {
+        mViewBinding.errorInclude.run {
+            errorNetworkGroup.gone()
+            lottieView.cancelAnimation()
         }
     }
+
+    override fun getViewBinding(): ActivityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
+
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && mViewBinding.webView.canGoBack()) {
@@ -79,28 +93,12 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
         return super.onKeyDown(keyCode, event)
     }
 
-    private fun showErrorDialog(title: String, message: String, context: Context) {
-        val dialog = AlertDialog.Builder(context)
-        dialog.setTitle(title)
-        dialog.setMessage(message)
-        dialog.setNegativeButton("Cancel") { _, _ ->
-            this@WebViewActivity.finish()
-        }
-        dialog.setNeutralButton("Settings") { _, _ ->
-            startActivity(Intent(Settings.ACTION_SETTINGS))
-        }
-        dialog.setPositiveButton("Retry") { _, _ ->
-            this@WebViewActivity.recreate()
-        }
-        dialog.create().show()
-    }
-
     private fun endLoaderAnimate() {
-        mViewBinding.lottieLoading.gone()
+        mViewBinding.progressBar.gone()
     }
 
     private fun startLoaderAnimate() {
-        mViewBinding.lottieLoading.visible()
+        mViewBinding.progressBar.visible()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -109,14 +109,19 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     }
 
     private fun showErrorView(@StringRes resId: Int) {
-        mViewBinding.errorNetworkView.visible()
-        mViewBinding.lottieView.playAnimation()
-        mViewBinding.tvError.setText(resId)
+        mViewBinding.errorInclude.run {
+            errorNetworkGroup.visible()
+            lottieView.playAnimation()
+            tvError.setText(resId)
+        }
+
     }
 
     private fun hideErrorView() {
-        mViewBinding.errorNetworkView.gone()
-        mViewBinding.lottieView.cancelAnimation()
+        mViewBinding.errorInclude.run {
+            errorNetworkGroup.gone()
+            lottieView.cancelAnimation()
+        }
     }
 
     private val newsStateObserver = Observer<PagedList<News>> { list ->

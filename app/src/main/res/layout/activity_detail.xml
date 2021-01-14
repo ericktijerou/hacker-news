@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ProgressBar
-        android:id="@+id/lottieLoading"
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -24,7 +24,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
@@ -32,5 +33,11 @@
         android:id="@+id/guideline"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="3dp" />
+
+    <include
+        android:id="@+id/errorInclude"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/network_error"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
