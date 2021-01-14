@@ -36,7 +36,7 @@ Asynchronous or non-blocking programming is the new reality. Whether we're creat
 it's important that we provide an experience that is not only fluid from the user's perspective, but scalable when needed.
 
 
-### View and Animations
+### View and Animation
 
 * [ConstraintLayout](https://developer.android.com/training/constraint-layout/index.html)
 Allows you to create large and complex layouts with a flat view hierarchy (no nested view groups).
