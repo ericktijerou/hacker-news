@@ -37,6 +37,11 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
         setContentView(mViewBinding.root)
         observeLoading()
         initRecyclerView()
+        initRefreshListener()
+        viewModel.loadNews()
+    }
+
+    private fun initRefreshListener() {
         mViewBinding.swipeContainer.setOnRefreshListener {
             hideErrorView()
             if (networkConnectivity.isInternetOn()) {
@@ -45,7 +50,6 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
                 showError(Error.Network)
             }
         }
-        viewModel.loadNews()
     }
 
     private fun initRecyclerView() {

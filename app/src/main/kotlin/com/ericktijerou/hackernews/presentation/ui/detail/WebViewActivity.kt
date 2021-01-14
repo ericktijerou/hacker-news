@@ -1,11 +1,7 @@
 package com.ericktijerou.hackernews.presentation.ui.detail
 
-import android.app.AlertDialog
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.webkit.WebResourceError
@@ -30,20 +26,28 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mViewBinding.root)
-        supportActionBar?.run {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-            title = Uri.parse(url).host
-        }
+        initToolbar()
+        initView()
+    }
+
+    private fun initView() {
         if (networkConnectivity.isInternetOn()) {
             hideErrorView()
-            initView()
+            initWebView()
         } else {
             showErrorView(R.string.no_internet)
         }
     }
 
-    private fun initView() {
+    private fun initToolbar() {
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = Uri.parse(url).host
+        }
+    }
+
+    private fun initWebView() {
         startLoaderAnimate()
         mViewBinding.webView.let {
             it.settings.javaScriptEnabled = true
