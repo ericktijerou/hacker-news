@@ -36,6 +36,8 @@ import Dependencies.retrofitScalarsConverter
 import Dependencies.roomCompiler
 import Dependencies.roomKtx
 import Dependencies.roomRuntime
+import java.io.FileInputStream
+import java.util.*
 
 plugins {
     id("com.android.application")
@@ -45,6 +47,19 @@ plugins {
 }
 
 android {
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    val keystoreProperties = Properties()
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+        }
+    }
+
     compileSdkVersion(30)
 
     defaultConfig {
@@ -77,6 +92,7 @@ android {
             isShrinkResources = true
             isDebuggable = false
             isZipAlignEnabled = true
+            signingConfig = signingConfigs.getByName("release")
 
             proguardFile(getDefaultProguardFile("proguard-android.txt"))
             proguardFile(file("proguard-rules.pro"))
