@@ -25,7 +25,7 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
 
     private val viewModel by viewModel<FeedViewModel>()
 
-    val networkConnectivity: NetworkConnectivity by inject()
+    private val networkConnectivity: NetworkConnectivity by inject()
 
     private val feedAdapter by lazy {
         FeedPagedListAdapter(::goToDetail, ::onFavoriteClick)
