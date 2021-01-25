@@ -11,7 +11,11 @@ import com.ericktijerou.hackernews.data.cache.entity.BlockNewsEntity
 import com.ericktijerou.hackernews.data.cache.entity.FavoriteNewsEntity
 import com.ericktijerou.hackernews.data.cache.entity.NewsEntity
 
-@Database(entities = [NewsEntity::class, BlockNewsEntity::class, FavoriteNewsEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [NewsEntity::class, BlockNewsEntity::class, FavoriteNewsEntity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class SystemDatabase : RoomDatabase() {
 
     abstract fun newsDao(): NewsDao
@@ -20,7 +24,8 @@ abstract class SystemDatabase : RoomDatabase() {
 
     companion object {
         fun newInstance(context: Context): SystemDatabase {
-            return Room.databaseBuilder(context, SystemDatabase::class.java, "news-system.db").build()
+            return Room.databaseBuilder(context, SystemDatabase::class.java, "news-system.db")
+                .build()
         }
     }
 }

@@ -9,7 +9,8 @@ import androidx.annotation.RequiresApi
 class NetworkConnectivity constructor(private val context: Context) {
 
     fun isInternetOn(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             postAndroidMInternetCheck(connectivityManager)
         } else {

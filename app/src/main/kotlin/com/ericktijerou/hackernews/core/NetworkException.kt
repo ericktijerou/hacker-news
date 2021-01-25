@@ -1,3 +1,3 @@
 package com.ericktijerou.hackernews.core
 
-class NetworkException: Exception()
+class NetworkException : Exception()

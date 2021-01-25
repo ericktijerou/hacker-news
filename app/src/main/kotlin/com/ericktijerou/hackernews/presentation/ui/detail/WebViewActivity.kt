@@ -14,14 +14,14 @@ import com.ericktijerou.hackernews.core.NetworkConnectivity
 import com.ericktijerou.hackernews.core.gone
 import com.ericktijerou.hackernews.core.visible
 import com.ericktijerou.hackernews.databinding.ActivityDetailBinding
-import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
 import com.ericktijerou.hackernews.presentation.ui.feed.FeedActivity.Companion.URL_EXTRA
+import com.ericktijerou.hackernews.presentation.ui.util.BaseActivity
 import org.koin.android.ext.android.inject
 
 class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
 
     private val url by lazy { intent.getStringExtra(URL_EXTRA).orEmpty() }
-    private val networkConnectivity : NetworkConnectivity by inject()
+    private val networkConnectivity: NetworkConnectivity by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +86,8 @@ class WebViewActivity : BaseActivity<ActivityDetailBinding>() {
         }
     }
 
-    override fun getViewBinding(): ActivityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
+    override fun getViewBinding(): ActivityDetailBinding =
+        ActivityDetailBinding.inflate(layoutInflater)
 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

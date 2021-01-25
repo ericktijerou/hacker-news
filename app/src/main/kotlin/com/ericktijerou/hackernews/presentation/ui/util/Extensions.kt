@@ -3,7 +3,6 @@ package com.ericktijerou.hackernews.presentation.ui.util
 import android.app.Activity
 import android.content.Intent
 import android.text.Spanned
-import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -12,14 +11,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import java.text.SimpleDateFormat
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.reflect.KClass
 
 fun <T> Activity.startNewActivity(
     target: KClass<T>,
-    extras: Intent.() -> Unit = {  }
+    extras: Intent.() -> Unit = { }
 ) where T : Activity {
     val intent = Intent(this, target.java)
     intent.apply { extras() }
@@ -65,7 +62,11 @@ fun String.getRelativeTime(): String {
             now,
             DateUtils.DAY_IN_MILLIS
         )
-        else -> DateUtils.getRelativeTimeSpanString(timeInMilliseconds, now, DateUtils.WEEK_IN_MILLIS)
+        else -> DateUtils.getRelativeTimeSpanString(
+            timeInMilliseconds,
+            now,
+            DateUtils.WEEK_IN_MILLIS
+        )
     }
     return relativeTime.toString()
 }

@@ -7,8 +7,9 @@ import com.ericktijerou.hackernews.data.entity.NewsModel
 import com.ericktijerou.hackernews.data.network.api.HackerNewsApi
 import com.ericktijerou.hackernews.data.network.entity.toData
 
-class NewsCloudStore(private val api: HackerNewsApi,
-                     private val networkConnectivity: NetworkConnectivity
+class NewsCloudStore(
+    private val api: HackerNewsApi,
+    private val networkConnectivity: NetworkConnectivity
 ) {
 
     suspend fun fetchNewsList(page: Int, pageSize: Int): List<NewsModel> {

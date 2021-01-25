@@ -38,11 +38,16 @@ class FeedPagedListAdapter(
     ): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_VIEW -> {
-                val view = ItemFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val view =
+                    ItemFeedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedViewHolder(view)
             }
             TYPE_NETWORK -> {
-                val view = ItemNetworkStateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val view = ItemNetworkStateBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
                 NetworkStateViewHolder(view)
             }
             else -> throw IllegalArgumentException("unknown view type $viewType")
@@ -57,7 +62,8 @@ class FeedPagedListAdapter(
         }
     }
 
-    private fun hasExtraRow() = state != Status.NONE && state != Status.LOADED && state != Status.FAILED
+    private fun hasExtraRow() =
+        state != Status.NONE && state != Status.LOADED && state != Status.FAILED
 
     override fun getItemCount(): Int {
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
@@ -79,7 +85,8 @@ class FeedPagedListAdapter(
         }
     }
 
-    inner class FeedViewHolder(private val binding: ItemFeedBinding) : CustomViewHolder(binding.clItemContainer) {
+    inner class FeedViewHolder(private val binding: ItemFeedBinding) :
+        CustomViewHolder(binding.clItemContainer) {
 
         val viewForeground = binding.viewForeground
 
@@ -99,8 +106,17 @@ class FeedPagedListAdapter(
             }
         }
 
-        private fun buildAnimation() : ScaleAnimation {
-            val scaleAnimation = ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        private fun buildAnimation(): ScaleAnimation {
+            val scaleAnimation = ScaleAnimation(
+                0.7f,
+                1.0f,
+                0.7f,
+                1.0f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+            )
             scaleAnimation.duration = 500
             scaleAnimation.interpolator = BounceInterpolator()
             return scaleAnimation
@@ -114,7 +130,8 @@ class FeedPagedListAdapter(
         }
     }
 
-    class NetworkStateViewHolder(private val binding: ItemNetworkStateBinding) : CustomViewHolder(binding.clProgressBar) {
+    class NetworkStateViewHolder(private val binding: ItemNetworkStateBinding) :
+        CustomViewHolder(binding.clProgressBar) {
 
         fun showProgress() {
             binding.lottieView.playAnimation()

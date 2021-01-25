@@ -2,19 +2,13 @@ package com.ericktijerou.hackernews.data.util
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
-import com.ericktijerou.hackernews.core.ActionType
-import com.ericktijerou.hackernews.core.Error
-import com.ericktijerou.hackernews.core.NetworkException
-import com.ericktijerou.hackernews.core.NetworkState
-import com.ericktijerou.hackernews.core.NotFoundException
+import com.ericktijerou.hackernews.core.*
 import com.ericktijerou.hackernews.data.cache.NewsDataStore
-import com.ericktijerou.hackernews.data.entity.NewsModel
 import com.ericktijerou.hackernews.data.network.NewsCloudStore
 import com.ericktijerou.hackernews.domain.entity.News
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class BoundaryCondition(
     private val actionType: Int,

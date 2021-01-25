@@ -3,7 +3,6 @@ package com.ericktijerou.hackernews.data.cache.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.ericktijerou.hackernews.data.entity.NewsModel
-import com.ericktijerou.hackernews.domain.entity.News
 
 @Entity(tableName = "News")
 data class NewsEntity(

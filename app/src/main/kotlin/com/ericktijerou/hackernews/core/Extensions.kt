@@ -2,7 +2,7 @@ package com.ericktijerou.hackernews.core
 
 import android.view.View
 
-fun Long?.orZero() : Long = this ?: 0
+fun Long?.orZero(): Long = this ?: 0
 
 inline fun <reified T : Any> listByElementsOf(vararg elements: Any): List<T> {
     val mutableList = mutableListOf<T>()
