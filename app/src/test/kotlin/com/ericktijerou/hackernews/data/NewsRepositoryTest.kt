@@ -16,7 +16,7 @@ class NewsRepositoryTest {
 
     private val dataStore = mockk<NewsDataStore>()
     private val cloudStore = mockk<NewsCloudStore>()
-    private val userRepository = NewsRepositoryImp(cloudStore, dataStore, CoroutineScope(Dispatchers.IO))
+    private val userRepository = NewsRepositoryImp(cloudStore, dataStore)
 
     @Test
     fun `should set a favorites by id`() = runBlocking {

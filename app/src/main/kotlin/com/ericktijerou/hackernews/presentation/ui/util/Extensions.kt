@@ -3,17 +3,15 @@ package com.ericktijerou.hackernews.presentation.ui.util
 import android.app.Activity
 import android.content.Intent
 import android.text.Spanned
+import android.text.format.DateFormat
 import android.text.format.DateUtils
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.text.HtmlCompat
-import androidx.core.util.Pair
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import java.time.LocalDate
+import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -42,14 +40,10 @@ fun String.toSpanned(): Spanned {
 
 fun String.getRelativeTime(): String {
     val now = Date().time
-
-    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.ROOT)
-    val timeInMilliseconds: Long = OffsetDateTime.parse(this, formatter)
-        .toInstant()
-        .toEpochMilli()
-
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.ROOT)
+    val date = dateFormat.parse(this)
+    val timeInMilliseconds = date?.time ?: 0
     val difference = now - timeInMilliseconds
-
     val relativeTime = when {
         difference < DateUtils.MINUTE_IN_MILLIS -> DateUtils.getRelativeTimeSpanString(
             timeInMilliseconds,
@@ -73,6 +67,5 @@ fun String.getRelativeTime(): String {
         )
         else -> DateUtils.getRelativeTimeSpanString(timeInMilliseconds, now, DateUtils.WEEK_IN_MILLIS)
     }
-
     return relativeTime.toString()
 }

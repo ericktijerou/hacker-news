@@ -25,8 +25,6 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
 
     private val viewModel by viewModel<FeedViewModel>()
 
-    private val networkConnectivity: NetworkConnectivity by inject()
-
     private val feedAdapter by lazy {
         FeedPagedListAdapter(::goToDetail, ::onFavoriteClick)
     }
@@ -44,11 +42,7 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
     private fun initRefreshListener() {
         mViewBinding.swipeContainer.setOnRefreshListener {
             hideErrorView()
-            if (networkConnectivity.isInternetOn()) {
-                viewModel.refreshNews()
-            } else {
-                showError(Error.Network)
-            }
+            viewModel.refreshNews()
         }
     }
 
@@ -57,7 +51,12 @@ class FeedActivity : BaseActivity<ActivityFeedBinding>() {
             layoutManager = LinearLayoutManager(this@FeedActivity)
             adapter = feedAdapter
             itemAnimator = DefaultItemAnimator()
-            addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
+            addItemDecoration(
+                DividerItemDecoration(
+                    applicationContext,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
             val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback {
                 viewModel.deleteNewsById(feedAdapter.getItemIdByPosition(it.adapterPosition))
             })
